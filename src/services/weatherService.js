@@ -31,7 +31,7 @@ export function WeatherServiceProvider({ children }) {
       currentCondition: data.current.condition.text,
       tempC: data.current.temp_c,
       wind: data.current.wind_kph,
-      humidity: data.current.humidity,
+      currentHumidity: data.current.humidity,
       hourlyForecast: data.forecast.forecastday[0].hour.map((hour) => ({
         time: hour.time,
         tempC: hour.temp_c,
