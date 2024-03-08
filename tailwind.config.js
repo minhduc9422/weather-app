@@ -6,9 +6,9 @@ module.exports = {
       borderWidth: {
         1: "1px",
       },
-      width: {
-        mlg: "855px",
-      },
+    },
+    height: {
+      cus: "600px",
     },
   },
   plugins: [],

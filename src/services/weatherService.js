@@ -35,15 +35,29 @@ export function WeatherServiceProvider({ children }) {
       hourlyForecast: data.forecast.forecastday[0].hour.map((hour) => ({
         time: hour.time,
         tempC: hour.temp_c,
+        hourlyIcon: hour.condition.icon,
       })),
     };
+  };
+
+  const extractDailyForecast = (forecastData) => {
+    return forecastData.forecast.forecastday.map((day) => ({
+      date: day.date,
+      dailyHumidity: day.day.avghumidity,
+      dailyIcon: day.day.condition.icon,
+    }));
   };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error.message}</div>;
 
   return (
-    <WeatherContext.Provider value={{ weatherData: extractWeatherData(data) }}>
+    <WeatherContext.Provider
+      value={{
+        weatherData: extractWeatherData(data),
+        weatherForecastData: extractDailyForecast(data),
+      }}
+    >
       {children}
     </WeatherContext.Provider>
   );
