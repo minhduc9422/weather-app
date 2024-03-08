@@ -6,22 +6,14 @@ function HourlyForecast() {
 
   return (
     <div>
-      <div className="flex flex-row border-t-2 border-b-2 overflow-hidden gap-1 items-center text-center justify-start">
-        <div className="p-3">
-          <p className="text-center">{weatherData.hourlyForecast[0].tempC}°C</p>
-          <img src={weatherData.hourlyForecast[0].hourlyIcon} alt="" />
-          <p>{formatTime(weatherData.hourlyForecast[0].time)}</p>
-        </div>
-        <div className="p-3">
-          <p>{weatherData.hourlyForecast[0].tempC}°C</p>
-          <img src={weatherData.hourlyForecast[0].hourlyIcon} alt="" />
-          <p>{formatTime(weatherData.hourlyForecast[0].time)}</p>
-        </div>
-        <div className="p-3">
-          <p>{weatherData.hourlyForecast[0].tempC}°C</p>
-          <img src={weatherData.hourlyForecast[0].hourlyIcon} alt="" />
-          <p>{formatTime(weatherData.hourlyForecast[0].time)}</p>
-        </div>
+      <div className="flex flex-row border-t-2 border-b-2 overflow-hidden no-scrollbar overscroll-none gap-1 items-center text-center justify-start overflow-x-auto">
+        {weatherData.hourlyForecast.slice(0, 24).map((hour, index) => (
+          <div key={index} className="p-3">
+            <p>{hour.tempC}°C</p>
+            <img src={hour.hourlyIcon} alt="" className="w-10 mx-auto mt-2" />
+            <p>{formatTime(hour.time)}</p>
+          </div>
+        ))}
       </div>
     </div>
   );

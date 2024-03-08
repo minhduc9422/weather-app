@@ -7,12 +7,11 @@ const TemperatureChart = () => {
   const { weatherData } = useContext(WeatherContext);
 
   const temperatures = weatherData.hourlyForecast.map((data) => data.tempC);
-  const minTemperature = Math.min(...temperatures);
-  const maxTemperature = Math.max(...temperatures);
+  const times = weatherData.hourlyForecast.map((data) => data.time);
 
-  const currentTime = new Date(weatherData.localTime);
   const currentTimeIndex = weatherData.hourlyForecast.findIndex((data) => {
     const dataTime = new Date(data.time);
+    const currentTime = new Date(weatherData.localTime);
     return (
       dataTime.getHours() === currentTime.getHours() &&
       dataTime.getMinutes() === currentTime.getMinutes()
@@ -27,7 +26,7 @@ const TemperatureChart = () => {
     <div>
       <Line
         data={{
-          labels: weatherData.hourlyForecast.map((data) => data.time),
+          labels: times,
           datasets: [
             {
               label: "Temperature",
@@ -38,7 +37,6 @@ const TemperatureChart = () => {
               borderWidth: 2,
               pointStyle: pointRadiusValues,
               cubicInterpolationMode: "monotone",
-              pointBackgroundColor: ["blue"],
             },
           ],
         }}
@@ -46,20 +44,16 @@ const TemperatureChart = () => {
           plugins: {
             tooltip: {
               callbacks: {
-                title: function (tooltipItems, data) {
+                title: function () {
                   return "";
                 },
-                label: function (context) {
-                  return ": " + context.parsed.y + "°C";
+                label: function (tooltipItem) {
+                  return ": " + tooltipItem.parsed.y + "°C";
                 },
               },
             },
             legend: {
-              display: true,
-              align: "start",
-              labels: {
-                boxWidth: 0,
-              },
+              display: false,
             },
           },
           scales: {
@@ -74,8 +68,8 @@ const TemperatureChart = () => {
               grid: {
                 display: false,
               },
-              min: minTemperature - 10,
-              max: maxTemperature + 10,
+              min: Math.min(...temperatures) - 10,
+              max: Math.max(...temperatures) + 10,
             },
           },
         }}
