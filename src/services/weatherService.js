@@ -1,9 +1,11 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { LocationContext } from "./locationContext";
 
 export const WeatherContext = createContext();
 
 export function WeatherServiceProvider({ children }) {
+  const { location } = useContext(LocationContext);
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -11,7 +13,7 @@ export function WeatherServiceProvider({ children }) {
   useEffect(() => {
     axios
       .get(
-        "http://api.weatherapi.com/v1/forecast.json?key=f5ac4be4a19c47d8a3e42522222112&q=hanoi&days=10&aqi=no&alerts=yes"
+        `http://api.weatherapi.com/v1/forecast.json?key=f5ac4be4a19c47d8a3e42522222112&q=${location}&days=10&aqi=no&alerts=yes`
       )
       .then((res) => {
         setData(res.data);
@@ -21,7 +23,7 @@ export function WeatherServiceProvider({ children }) {
         setError(err);
         setLoading(false);
       });
-  }, []);
+  }, [location]);
 
   const extractWeatherData = (data) => {
     return {

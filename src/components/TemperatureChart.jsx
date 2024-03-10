@@ -25,6 +25,7 @@ const TemperatureChart = () => {
   return (
     <div>
       <Line
+        className="max-h-40"
         data={{
           labels: times,
           datasets: [
@@ -53,7 +54,11 @@ const TemperatureChart = () => {
               },
             },
             legend: {
-              display: false,
+              display: true,
+              align: "start",
+              labels: {
+                boxWidth: 0,
+              },
             },
           },
           scales: {

@@ -33,7 +33,7 @@ function DaylyForecast() {
       {weatherForecastData.slice(0, 3).map((forecast, index) => (
         <div
           key={index}
-          className="py-5 px-9 rounded-lg hover:bg-sky-500 hover:text-white transition ease-in-out delay-75 cursor-pointer"
+          className="py-5 px-9 rounded-lg hover:bg-sky-500 hover:text-white transition ease-in-out cursor-pointer"
         >
           <p>{index === 0 ? "Today" : formatDate(forecast.date)}</p>
           <img
