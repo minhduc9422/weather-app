@@ -1,17 +1,19 @@
-import React, { useContext, useState } from "react";
-import { LocationContext } from "../services/locationContext";
-import { WeatherContext } from "../services/weatherService";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { changeLocation } from "../actions/locationActions";
+import { fetchWeather } from "../actions/weatherActions";
 
 function Input() {
   const [inputLocation, setInputLocation] = useState("");
-  const { changeLocation } = useContext(LocationContext);
-  const { weatherData } = useContext(WeatherContext);
+  const dispatch = useDispatch();
+  const { weatherData } = useSelector((state) => state.weather);
 
   const handleLocationChange = (e) => setInputLocation(e.target.value);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    changeLocation(inputLocation);
+    dispatch(changeLocation(inputLocation));
+    dispatch(fetchWeather(inputLocation));
     setInputLocation("");
   };
 

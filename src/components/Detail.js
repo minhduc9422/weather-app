@@ -1,9 +1,10 @@
 import React, { useContext } from "react";
-import { WeatherContext } from "../services/weatherService";
+import { useSelector } from "react-redux";
 import Input from "./Input";
+import { formatDate } from "../utils/dateUtils";
 
 function Detail() {
-  const { weatherData } = useContext(WeatherContext);
+  const weatherData = useSelector((state) => state.weather.weatherData);
   const formattedDate = formatDate(weatherData.localTime);
 
   return (
@@ -38,20 +39,6 @@ function Detail() {
       </div>
     </div>
   );
-}
-
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const options = {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "numeric",
-    hour12: true,
-  };
-  return date.toLocaleString("en-US", options);
 }
 
 function WeatherInfo({ label, value }) {

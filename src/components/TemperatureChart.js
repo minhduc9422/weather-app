@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { Line, Chart } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-import { WeatherContext } from "../services/weatherService";
+import { useSelector } from "react-redux";
 
 const TemperatureChart = () => {
-  const { weatherData } = useContext(WeatherContext);
+  const weatherData = useSelector((state) => state.weather.weatherData);
 
   const temperatures = weatherData.hourlyForecast.map((data) => data.tempC);
   const times = weatherData.hourlyForecast.map((data) => data.time);

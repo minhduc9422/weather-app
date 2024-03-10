@@ -1,63 +1,40 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import axios from "axios";
-import { LocationContext } from "./locationContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchWeatherRequest,
+  fetchWeatherSuccess,
+  fetchWeatherFailure,
+} from "../actions/weatherActions";
 
 export const WeatherContext = createContext();
 
 export function WeatherServiceProvider({ children }) {
   const { location } = useContext(LocationContext);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state) => state.weather);
 
   useEffect(() => {
+    dispatch(fetchWeatherRequest());
     axios
       .get(
         `http://api.weatherapi.com/v1/forecast.json?key=f5ac4be4a19c47d8a3e42522222112&q=${location}&days=10&aqi=no&alerts=yes`
       )
       .then((res) => {
-        setData(res.data);
-        setLoading(false);
+        dispatch(fetchWeatherSuccess(res.data));
       })
       .catch((err) => {
-        setError(err);
-        setLoading(false);
+        dispatch(fetchWeatherFailure(err.message));
       });
-  }, [location]);
-
-  const extractWeatherData = (data) => {
-    return {
-      name: data.location.name,
-      localTime: data.location.localtime,
-      currentImage: data.current.condition.icon,
-      currentCondition: data.current.condition.text,
-      tempC: data.current.temp_c,
-      wind: data.current.wind_kph,
-      currentHumidity: data.current.humidity,
-      hourlyForecast: data.forecast.forecastday[0].hour.map((hour) => ({
-        time: hour.time,
-        tempC: hour.temp_c,
-        hourlyIcon: hour.condition.icon,
-      })),
-    };
-  };
-
-  const extractDailyForecast = (forecastData) => {
-    return forecastData.forecast.forecastday.map((day) => ({
-      date: day.date,
-      dailyHumidity: day.day.avghumidity,
-      dailyIcon: day.day.condition.icon,
-    }));
-  };
+  }, [dispatch, location]);
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <WeatherContext.Provider
       value={{
-        weatherData: extractWeatherData(data),
-        weatherForecastData: extractDailyForecast(data),
+        weatherData: data,
       }}
     >
       {children}
